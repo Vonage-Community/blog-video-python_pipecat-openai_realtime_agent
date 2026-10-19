@@ -141,13 +141,13 @@ def test_redact_masks_bearer_values():
 
 def test_log_output_is_redacted(capsys):
     setup_logging("INFO")
-    logger.info("calling OpenAI with sk-live-1234567890abcdef")
+    logger.info("calling OpenAI with sk-fake-1234567890abcdef")
     try:
         raise RuntimeError("token eyJhbGciOiJSUzI1NiJ9.eyJhIjoxfQ.c2ln leaked")
     except RuntimeError:
         logger.exception("failure")
     err = capsys.readouterr().err
-    assert "sk-live-1234567890abcdef" not in err
+    assert "sk-fake-1234567890abcdef" not in err
     assert "eyJhbGciOiJSUzI1NiJ9.eyJhIjoxfQ.c2ln" not in err
     assert "sk-[redacted]" in err
     assert "[jwt redacted]" in err

@@ -150,10 +150,10 @@ async def test_agent_crash_marks_the_session_failed(settings):
 async def test_reported_agent_failure_is_redacted_and_ends_the_session(settings):
     manager, agents = make_manager(settings)
     created = await manager.create_session()
-    created.session.agent_failed("OpenAI rejected key sk-live-0123456789abcdef")
+    created.session.agent_failed("OpenAI rejected key sk-fake-0123456789abcdef")
     await wait_until(lambda: created.session.finished)
     assert created.session.state == SessionState.FAILED
-    assert "sk-live-0123456789abcdef" not in (created.session.error or "")
+    assert "sk-fake-0123456789abcdef" not in (created.session.error or "")
     assert agents.agents[0].stop_calls == 1
 
 
