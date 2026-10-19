@@ -1,0 +1,240 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f6f6f8;
+  --panel: #ffffff;
+  --text: #1c1c22;
+  --muted: #5d5d6b;
+  --border: #dedee6;
+  --accent: #7b2ff7;
+  --accent-text: #ffffff;
+  --danger: #c62828;
+  --ok: #1b7f3b;
+  --notice-bg: #fff6db;
+  --notice-border: #e9c46a;
+  --error-bg: #fdecea;
+  --tile: #20202a;
+  --tile-text: #f2f2f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121216;
+    --panel: #1c1c23;
+    --text: #ececf1;
+    --muted: #a5a5b4;
+    --border: #33333f;
+    --accent: #a678ff;
+    --accent-text: #111116;
+    --danger: #ef6b6b;
+    --ok: #5cc98a;
+    --notice-bg: #2b2616;
+    --notice-border: #806a2b;
+    --error-bg: #3a1d1d;
+    --tile: #0b0b0f;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.page {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+h1 {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin: 0 0 8px;
+}
+
+.subtitle,
+.hint,
+footer {
+  color: var(--muted);
+}
+
+footer {
+  font-size: 0.875rem;
+  margin-top: 32px;
+}
+
+.disclosure {
+  background: var(--notice-bg);
+  border: 1px solid var(--notice-border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.checkbox {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+button {
+  font: inherit;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-text);
+  font-weight: 600;
+}
+
+button.danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+button[aria-pressed="true"] {
+  background: var(--text);
+  color: var(--panel);
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  margin: 0;
+  background: var(--tile);
+  color: var(--tile-text);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.video,
+.placeholder {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+}
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #b9b9c8;
+  gap: 8px;
+}
+
+.agent-card svg {
+  fill: var(--accent);
+}
+
+.tile figcaption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  font-weight: 600;
+}
+
+.tile meter {
+  margin-left: auto;
+  width: 90px;
+}
+
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: #fff;
+}
+
+.badge.ok {
+  background: var(--ok);
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.time-left {
+  margin-left: auto;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+#enable-audio {
+  margin-top: 16px;
+}
+
+.status {
+  font-weight: 600;
+  min-height: 1.5em;
+}
+
+.error {
+  background: var(--error-bg);
+  border: 1px solid var(--danger);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.error ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+/* Present for the SDK's audio element, but not shown. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+[hidden] {
+  display: none !important;
+}

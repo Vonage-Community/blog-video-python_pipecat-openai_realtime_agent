@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vonage Video + OpenAI Realtime voice agent</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Vonage Video Web SDK, pinned to the version this sample was built against. -->
+    <script src="https://unpkg.com/@vonage/client-sdk-video@2.35.3/dist/js/opentok.min.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main class="page">
+      <header>
+        <h1>Talk to an AI voice agent in a Vonage Video call</h1>
+        <p class="subtitle">
+          Your browser and a Pipecat agent join the same Vonage Video session. The agent
+          answers with OpenAI Realtime speech-to-speech.
+        </p>
+      </header>
+
+      <aside class="disclosure" aria-label="AI disclosure">
+        <strong>You are talking to an AI, not a person.</strong>
+        Its answers can be wrong. Your microphone audio travels through Vonage Video to
+        OpenAI for the length of the call. This demo does not record anything.
+      </aside>
+
+      <section id="setup" class="panel">
+        <label class="checkbox">
+          <input type="checkbox" id="use-camera" />
+          Turn on my camera too (optional; the agent only listens)
+        </label>
+        <p class="hint">Use headphones if you can, so the agent doesn't hear itself.</p>
+        <button id="start" class="primary" type="button">Start conversation</button>
+      </section>
+
+      <section id="call" class="panel" hidden>
+        <div class="tiles">
+          <figure class="tile" id="you-tile">
+            <div id="publisher" class="video"></div>
+            <div id="you-placeholder" class="placeholder" hidden>Microphone only</div>
+            <figcaption>
+              <span>You</span>
+              <span id="muted-badge" class="badge" hidden>Muted</span>
+              <meter id="you-level" min="0" max="1" value="0" aria-label="Your microphone level"></meter>
+            </figcaption>
+          </figure>
+
+          <figure class="tile agent" id="agent-tile">
+            <div class="placeholder agent-card" aria-hidden="true">
+              <svg viewBox="0 0 64 64" width="72" height="72">
+                <rect x="8" y="26" width="6" height="12" rx="3" />
+                <rect x="20" y="16" width="6" height="32" rx="3" />
+                <rect x="32" y="8" width="6" height="48" rx="3" />
+                <rect x="44" y="18" width="6" height="28" rx="3" />
+                <rect x="56" y="27" width="6" height="10" rx="3" />
+              </svg>
+              <p>Audio-only AI participant<br />(no video)</p>
+            </div>
+            <!-- The SDK plays the agent's audio from an element it creates in here. -->
+            <div id="agent-media" class="visually-hidden"></div>
+            <figcaption>
+              <span>AI agent</span>
+              <span id="agent-hearing" class="badge ok" hidden>Can hear you</span>
+              <meter id="agent-level" min="0" max="1" value="0" aria-label="AI agent audio level"></meter>
+            </figcaption>
+          </figure>
+        </div>
+
+        <button id="enable-audio" class="primary" type="button" hidden>
+          Click to enable audio
+        </button>
+
+        <div class="controls">
+          <button id="mute" type="button">Mute</button>
+          <button id="camera" type="button" hidden>Turn camera off</button>
+          <button id="leave" class="danger" type="button">Leave</button>
+          <span id="time-left" class="time-left" aria-live="off"></span>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status" aria-live="polite">Ready when you are.</p>
+      <div id="error" class="error" role="alert" hidden></div>
+
+      <footer>
+        <p>
+          Built with the Vonage Video API, Pipecat, and OpenAI Realtime. The agent's audio
+          reaches you through the Vonage Video session, never directly from OpenAI.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
