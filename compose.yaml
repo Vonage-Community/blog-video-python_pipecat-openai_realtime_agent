@@ -1,0 +1,24 @@
+# docker compose up --build    then open http://localhost:8000
+services:
+  app:
+    build: .
+    image: vonage-pipecat-openai-realtime:local
+    # A tiny init process forwards Ctrl-C/stop signals and reaps the per-session
+    # agent processes.
+    init: true
+    env_file: .env
+    environment:
+      VONAGE_PRIVATE_KEY_PATH: /run/secrets/vonage_private_key
+    secrets:
+      - vonage_private_key
+    ports:
+      # Localhost only: the session API has no user accounts, so don't expose it
+      # to your network.
+      - "127.0.0.1:${PORT:-8000}:8000"
+    # Time for running agents to leave their Vonage session and close OpenAI.
+    stop_grace_period: 20s
+
+secrets:
+  vonage_private_key:
+    # Mounted read-only at /run/secrets/vonage_private_key. Never baked into the image.
+    file: ${VONAGE_PRIVATE_KEY_FILE:-./secrets/private.key}

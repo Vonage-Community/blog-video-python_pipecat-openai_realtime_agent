@@ -1,0 +1,64 @@
+[project]
+name = "vonage-pipecat-openai-realtime"
+version = "1.0.0"
+description = "Add a real-time OpenAI voice agent to a Vonage Video session with Pipecat."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+# The Vonage Video Connector ships CPython 3.11+ abi3 wheels for Linux only.
+# The Docker image uses Python 3.12.
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    # Pipecat from the Vonage fork, pinned to one tested commit (tag v1.11.0.post1).
+    # The extras pull in the OpenAI Realtime service and, on Linux only, the native
+    # `vonage-video-connector` wheel. See docs/DEPENDENCIES.md before changing this.
+    "pipecat-ai[openai,vonage-video-connector] @ git+https://github.com/Vonage/pipecat.git@be8ede1c19c9974cd3cc430814fb6a591408f54f",
+    # Vonage server SDK: creates routed sessions and signs participant tokens.
+    "vonage>=4.9.0,<5",
+    "fastapi>=0.135,<1",
+    "uvicorn>=0.54,<1",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28,<1",
+    "mypy>=1.18,<2",
+    "pytest>=8.4,<9",
+    "pytest-asyncio>=1.2,<2",
+    "ruff>=0.14,<1",
+]
+
+[tool.uv]
+# This repository is an application, not a library: nothing is built or published.
+package = false
+# Reproducible resolution for the frozen tutorial: ignore releases newer than this
+# date when re-locking. Bump deliberately, then re-run the tests and manual checklist.
+exclude-newer = "2026-10-12T00:00:00Z"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+filterwarnings = [
+    "ignore:'audioop' is deprecated:DeprecationWarning",
+    # Raised inside Pipecat's smart-turn model loader; not our code.
+    "ignore:path is deprecated:DeprecationWarning",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["ASYNC", "B", "E", "F", "I", "RUF006", "S", "UP", "W"]
+ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S105", "S106"]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["app"]
+ignore_missing_imports = true
+warn_unused_ignores = true
+check_untyped_defs = true

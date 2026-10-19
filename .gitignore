@@ -1,0 +1,29 @@
+# Secrets: never commit these
+.env
+.env.*
+!.env.example
+secrets/*
+!secrets/README.md
+*.pem
+*.key
+
+# Recordings, transcripts and logs (this app writes none by default)
+recordings/
+transcripts/
+*.wav
+*.mp3
+*.log
+
+# Python and tooling
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+uv-cache/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
