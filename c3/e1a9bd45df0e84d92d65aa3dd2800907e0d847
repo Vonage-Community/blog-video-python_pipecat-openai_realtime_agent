@@ -1,0 +1,36 @@
+CHANGELOG.md
+  h_d5be481ddf6211 10,13
+CLAUDE.md
+  h_d5be481ddf6211 50-51
+Dockerfile
+  h_d5be481ddf6211 42,56
+LICENSE
+  h_d5be481ddf6211 3
+README.md
+  h_d5be481ddf6211 64-66,81,87-105,120,271-280,297-299,306-307
+docs/BLOG_NOTES.md
+  h_d5be481ddf6211 123,197-198,210
+docs/DEPENDENCIES.md
+  h_d5be481ddf6211 10,14-17,19-20,23,27-46,70,91-94,102,104-111,116
+pyproject.toml
+  h_d5be481ddf6211 12-15,17,36
+secrets/README.md
+  h_d5be481ddf6211 3-4
+tests/test_api.py
+  h_d5be481ddf6211 46
+uv.lock
+  h_d5be481ddf6211 6,274,278,285,287,332-353,395-399,426-434,726-727,740,750-753,756-758,763-777,1003,1005,1007-1012,1122,1144,1146,1222,1229,1231,1312,1329,1331,1427,1434,1436,1453,1460,1462
+web/index.html
+  h_d5be481ddf6211 9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c3e1a9bd45df0e84d92d65aa3dd2800907e0d847",
+  "prompts": {},
+  "humans": {
+    "h_d5be481ddf6211": {
+      "author": "Benjamin Aronov <benjamin@benyas.com>"
+    }
+  }
+}
