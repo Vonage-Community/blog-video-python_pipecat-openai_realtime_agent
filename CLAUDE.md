@@ -47,8 +47,8 @@ docker compose up --build                    # run the app on http://localhost:8
 
 ## Dependencies
 
-- Pipecat comes from the Vonage fork at one pinned commit; see
-  `docs/DEPENDENCIES.md` before changing it. Never also install `pipecat-ai` from PyPI.
+- Pipecat comes from PyPI (`pipecat-ai`) at one pinned version; see
+  `docs/DEPENDENCIES.md` before changing it. Never install the Vonage fork alongside it.
 - `uv.lock` is committed; Docker uses `uv sync --frozen`.
 - Check the real source of a new Pipecat or Vonage version before using an API. Don't
   rely on memory or older examples.

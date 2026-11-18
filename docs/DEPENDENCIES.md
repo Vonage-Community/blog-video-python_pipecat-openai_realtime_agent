@@ -7,50 +7,43 @@ says or fails.
 ## Pinned versions
 
 Versions as installed in the Docker image and printed by `importlib.metadata` inside
-the container (2026-10-19):
+the container (2026-11-18):
 
 | Component | Version | Source |
 |---|---|---|
-| Python | 3.12.15 | `python:3.12-slim-bookworm` (Debian 12, glibc 2.36) |
-| `pipecat-ai` | 1.11.0.post1 | Vonage fork, commit `be8ede1c19c9974cd3cc430814fb6a591408f54f` |
-| `vonage-video-connector` | 1.0.3 | PyPI, via the fork's `vonage-video-connector` extra (OpenTok Linux SDK 2.32.1 inside) |
-| `openai` | 3.29.0 | PyPI, via the fork's dependencies |
+| Python | 3.12.16 | `python:3.12-slim-bookworm` (Debian 12, glibc 2.36) |
+| `pipecat-ai` | 1.16.0 | PyPI, with the `openai` and `vonage-video-connector` extras |
+| `vonage-video-connector` | 1.0.3 | PyPI, via Pipecat's `vonage-video-connector` extra (OpenTok Linux SDK 2.32.1 inside) |
+| `openai` | 3.29.0 | PyPI, via Pipecat's `openai` extra |
 | `websockets` | 17.2 | PyPI |
-| `vonage` (server SDK) | 4.9.0 | PyPI (`vonage-video` 1.6.0, `vonage-http-client` 1.5.2) |
-| `fastapi` / `uvicorn` | 0.143.0 / 0.54.0 | PyPI |
+| `vonage` (server SDK) | 4.10.0 | PyPI (`vonage-video` 1.6.1) |
+| `fastapi` / `uvicorn` | 0.162.5 / 0.54.0 | PyPI |
 | `pydantic` | 2.14.1 | PyPI (the connector requires `~=2.11`) |
 | `numpy` / `onnxruntime` | 2.5.4 / 1.24.4 | PyPI, Pipecat dependencies |
-| Vonage Video Web SDK | `@vonage/client-sdk-video@2.35.3` | npm via unpkg (published 2026-10-06, `latest` tag at the time) |
+| Vonage Video Web SDK | `@vonage/client-sdk-video@2.36.0` | npm via unpkg |
 | OS packages | `libexpat1`, `libglib2.0-0` | Debian bookworm; the list Vonage's server samples install |
 | uv | 0.11.32 | PyPI, build stage only |
 
-`[tool.uv] exclude-newer = "2026-10-12T00:00:00Z"` keeps re-locking away from
-same-week releases (FastAPI shipped six releases in the two days before this lock).
+`[tool.uv] exclude-newer = "2026-11-13T00:00:00Z"` keeps re-locking away from
+same-week releases.
 
-## The Pipecat source: why the Vonage fork at `be8ede1`
+## The Pipecat source: PyPI `pipecat-ai`
 
-- **Commit:** `be8ede1c19c9974cd3cc430814fb6a591408f54f` on
-  [Vonage/pipecat](https://github.com/Vonage/pipecat) `main`, tagged `v1.11.0.post1`
-  in the fork, dated 2026-10-06 ("Merge pull request #25 from Vonage/1.00_rc"). It
-  includes the bump of `vonage-video-connector` to 1.0.3.
-- **Why the fork:** the project treats Vonage's fork as the source of truth for the
-  Vonage transport. Pinning a full SHA in `pyproject.toml` (not a branch) means the
-  tutorial can't change underneath its readers.
-- **One manifest, no conflicts:** installing the fork from Git and then
-  `pip install pipecat-ai[...]` from PyPI would replace one with the other. Here the
-  fork is the only `pipecat-ai` requirement, and its `openai` and
-  `vonage-video-connector` extras are resolved together in `uv.lock`.
-- **Upstream status (for maintainers):** upstream `pipecat-ai` on PyPI (1.11.0 to
-  1.13.0 at the time of writing) also ships `pipecat.transports.vonage` and a
-  `vonage-video-connector` extra. Compared with the fork at this SHA,
-  `video_connector.py` differs only by an added `get_client_id()` helper, and
-  `utils.py` is identical. Vonage's own server samples install PyPI `pipecat-ai==1.3.0`
-  plus `vonage-video-connector`. Moving this sample to PyPI is possible, but it is a
-  dependency change that needs the full manual test again.
+- **Why PyPI:** the [Vonage Video Transport for Pipecat guide](https://developer.vonage.com/en/video/guides/vonage-video-connector-pipecat-transport)
+  installs `pipecat-ai[vonage-video-connector]` from PyPI, so readers get the same
+  package the official docs describe. Pinning an exact version in `pyproject.toml`
+  means the tutorial can't change underneath its readers.
+- **History:** versions up to 1.0.0 of this sample used the
+  [Vonage Pipecat fork](https://github.com/Vonage/pipecat) at commit `be8ede1`
+  (fork tag `v1.11.0.post1`). Its Vonage transport differed from upstream only by a
+  `get_client_id()` helper this sample doesn't use, and the fork has had no commits
+  since 2026-10-06.
+- **One source only:** never install the fork from Git alongside PyPI `pipecat-ai`;
+  one replaces the other.
 
-## APIs verified at the pinned commit
+## APIs verified at the pinned version
 
-Read in the fork's source and exercised by `tests/test_agent.py` with the real classes:
+Read in Pipecat's source and exercised by `tests/test_agent.py` with the real classes:
 
 - `VonageVideoConnectorTransport(application_id, session_id, token, params)` with
   `VonageVideoConnectorTransportParams(audio_in_enabled, audio_out_enabled,
@@ -74,7 +67,7 @@ Read in the fork's source and exercised by `tests/test_agent.py` with the real c
 | Topic | Sources | Choice |
 |---|---|---|
 | Turn detection | The fork's `transports-vonage.py` adds local Silero VAD; upstream `realtime-openai.py` says local VAD is unnecessary with OpenAI's server VAD. | OpenAI server-side `semantic_vad`. In realtime mode the aggregator turns OpenAI's speech-start events into `InterruptionFrame`s, and the Vonage output transport clears its buffers on them. |
-| Pipeline classes | Older project notes used `PipelineTask` and `OpenAILLMContext`. | The pinned fork's `PipelineWorker`, `WorkerRunner`, `LLMContext`. |
+| Pipeline classes | Older project notes used `PipelineTask` and `OpenAILLMContext`. | Pipecat 1.16's `PipelineWorker`, `WorkerRunner`, `LLMContext`. |
 | Connector instances | The Vonage Video Connector guide's limits list one connector instance per process. The native SDK logs "Trying to create a second instance of VonageVideoClient", even after the first is freed. | One OS process per session (`app/agent_process.py`). |
 | Routed sessions | The project brief requires routed sessions. Vonage docs require them for the Audio Connector; the Video Connector guide doesn't say either way. Kitt Phi's tested tutorial uses routed sessions. | Always routed. |
 | Native log level | Pipecat's transport defaults the connector to `INFO`; the connector's own default is `WARN`. | `WARN`, or `INFO` when `LOG_LEVEL=DEBUG`. Native logs go straight to stderr and bypass the app's redaction. |
@@ -95,9 +88,10 @@ Read in the fork's source and exercised by `tests/test_agent.py` with the real c
 
 | Platform | Status |
 |---|---|
-| Linux x86_64 (Docker) | **Verified:** image builds, imports load, the native library resolves every shared library (`ldd`), and the tests pass inside the image. |
-| Linux arm64 (Docker on Apple Silicon, Graviton) | **Not verified.** Every compiled dependency in `uv.lock` (including `vonage-video-connector` and `onnxruntime`) has a manylinux aarch64 wheel, so a native build shouldn't need emulation or compilers. Not built or run here. |
-| macOS / Windows hosts | **Not verified here.** Supported through Docker Desktop: the agent runs in the Linux container, and the browser uses `localhost`. |
+| Linux x86_64 (Docker) | **Verified with 1.0.0 (fork):** image builds, imports load, the native library resolves every shared library (`ldd`), and the tests pass. Not yet re-run with Pipecat 1.16.0. |
+| Linux arm64 (Docker Desktop on Apple Silicon) | **Verified 2026-11-18 with Pipecat 1.16.0:** the image builds from a normal network, lint, types, and tests pass inside it, and in `echo` mode the agent joins a real routed Vonage session and publishes its audio stream. |
+| macOS host | **Partly verified:** Docker Desktop 29.5 on Apple Silicon, as above. Browser audio not yet tested. |
+| Windows host | **Not verified.** Supported through Docker Desktop: the agent runs in the Linux container, and the browser uses `localhost`. |
 | Running the agent outside Docker on macOS/Windows | Not supported: the connector ships Linux wheels only. The API and its unit tests do run there; the Linux-only tests skip. |
 
 The wheels are `manylinux_2_35`, so any base image needs glibc 2.35 or newer.
@@ -105,22 +99,21 @@ Vonage recommends Debian Bookworm for the connector.
 
 ## How this was verified, and what wasn't
 
-The build environment could reach PyPI, GitHub, and Docker registries, but not
-Debian mirrors, unpkg, Vonage, or OpenAI. As a result:
+On 2026-11-18, on macOS with Docker Desktop (arm64), on a normal network:
 
-- The Docker builds used for testing replaced the `apt-get` source with a local
-  repository of the same bookworm packages, repacked from the official
-  `python:3.12-bookworm` image. The `Dockerfile` itself was not changed.
-  **Run a clean build (`docker compose build --no-cache`) on a normal network
-  before publishing.**
-- The browser tests served the Web SDK from the npm tarball of the same version,
-  byte-identical to what unpkg serves.
-- **No live Vonage session or OpenAI call was made.** See `docs/MANUAL_TEST.md`.
+- `docker build --target test .` built the image, including `apt-get` from Debian
+  mirrors, and passed ruff, mypy, and pytest (79 passed, 1 skipped).
+- In `echo` mode, `POST /api/sessions` created a routed Vonage session, the agent
+  process joined it, published audio, and exited cleanly when the ready timeout
+  ended the session.
+- The Web SDK URL on unpkg returns 200.
+- **Not yet verified:** browser audio in both directions, and any OpenAI Realtime
+  call. See `docs/MANUAL_TEST.md`.
 
 ## Updating dependencies
 
 1. Change the pin in `pyproject.toml` (and `exclude-newer` if needed), then run `uv lock`.
-2. If the Pipecat source changes, re-read `transports/vonage/video_connector.py`,
+2. If the Pipecat version changes, re-read `transports/vonage/video_connector.py`,
    `transports/vonage/client.py`, and `services/openai/realtime/llm.py` at the new
    commit, and update the tables above.
 3. Run `docker build --target test .` and the full manual test.

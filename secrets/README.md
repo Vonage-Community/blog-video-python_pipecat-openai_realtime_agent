@@ -1,9 +1,9 @@
 # secrets/
 
-Put your Vonage application's private key here as `private.key`.
+Put your Vonage application's private key here as `private.key`. The README's
+`vonage apps create ... --private-key-file ./secrets/private.key` step saves it here.
 
 ```bash
-cp ~/Downloads/private.key secrets/private.key
 chmod 700 secrets              # other users on this machine can't open the folder
 chmod 644 secrets/private.key  # the container's unprivileged user can read the file
 ```

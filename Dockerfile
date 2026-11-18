@@ -17,10 +17,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 FROM base AS builder
 
-# git is needed only to fetch the pinned Vonage Pipecat fork commit.
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends git \
-    && rm -rf /var/lib/apt/lists/*
 RUN pip install --no-cache-dir uv==0.11.32
 
 ENV UV_COMPILE_BYTECODE=1 \
@@ -43,8 +39,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 COPY app ./app
 COPY web ./web
 COPY tests ./tests
-ENV PATH="/opt/venv/bin:$PATH" \
-    NUMBA_CACHE_DIR=/tmp/numba-cache
+ENV PATH="/opt/venv/bin:$PATH"
 RUN ruff check app tests && mypy && pytest -q
 
 
@@ -58,9 +53,7 @@ WORKDIR /app
 COPY app ./app
 COPY web ./web
 
-# numba (used by an audio resampling dependency) needs a writable cache directory.
-ENV PATH="/opt/venv/bin:$PATH" \
-    NUMBA_CACHE_DIR=/tmp/numba-cache
+ENV PATH="/opt/venv/bin:$PATH"
 
 USER app
 EXPOSE 8000

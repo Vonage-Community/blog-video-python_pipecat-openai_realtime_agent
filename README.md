@@ -61,8 +61,9 @@ one connector instance per process. It also means a stuck agent can always be ki
 
 ## Prerequisites
 
-- **A Vonage account** and a **Vonage application with Video enabled**: its
-  Application ID and the `private.key` file generated for it (steps below).
+- **A Vonage account** and the [Vonage CLI](https://github.com/Vonage/vonage-cli)
+  3.3.1 or newer (`npm install -g @vonage/cli`), to create the Video application
+  (steps below).
 - **An OpenAI API key** with access to a Realtime model and API billing set up.
   A ChatGPT subscription does not include API credits.
 - **Docker** with Docker Compose v2 (Docker Desktop on macOS/Windows).
@@ -76,22 +77,32 @@ Both services bill per use; see [Limitations and costs](#limitations-and-costs).
 
 ## Quick start
 
-These commands assume a terminal in this repository's folder. If you haven't cloned
-it yet (replace the placeholder with the repository's real location):
-
 ```bash
-git clone https://github.com/<YOUR_GITHUB_ORG>/vonage-pipecat-openai-realtime.git
+git clone https://github.com/Vonage-Community/vonage-pipecat-openai-realtime.git
 cd vonage-pipecat-openai-realtime
 ```
 
 ### 1. Create the Vonage application
 
-1. Sign in to the [Vonage API Dashboard](https://dashboard.nexmo.com) and open
-   **Applications** > **Create a new application**.
-2. Name it, then click **Generate public and private key**. Your browser downloads
-   `private.key`; keep it safe, it can't be downloaded again.
-3. Under **Capabilities**, turn on **Video**.
-4. Click **Generate new application** and copy the **Application ID**.
+Authenticate the CLI with the API key and secret from the
+[Vonage API Dashboard](https://dashboard.vonage.com), then create the application.
+`--private-key-file` saves its private key straight into `secrets/`:
+
+```bash
+vonage auth set --api-key <VONAGE_API_KEY> --api-secret <VONAGE_API_SECRET>
+vonage apps create "Pipecat OpenAI Realtime Agent" --private-key-file ./secrets/private.key
+```
+
+Copy the **Application ID** from the output, then turn on Video for it:
+
+```bash
+vonage apps capabilities update <APPLICATION_ID> video > /dev/null
+vonage apps show <APPLICATION_ID>
+```
+
+At the time of writing, Vonage CLI 3.3.1 prints your stored credentials when it
+updates the Video capability, so the command discards its output (errors still
+show). `vonage apps show` confirms the application now lists `VIDEO`.
 
 ### 2. Configure the app
 
@@ -106,10 +117,9 @@ VONAGE_APPLICATION_ID=your-application-id
 OPENAI_API_KEY=sk-...
 ```
 
-### 3. Add the private key
+### 3. Set the private key's permissions
 
 ```bash
-cp ~/Downloads/private.key secrets/private.key
 chmod 700 secrets              # other users on this machine can't open the folder
 chmod 644 secrets/private.key  # the container's unprivileged user can read the file
 ```
@@ -258,6 +268,16 @@ and your echo, Vonage works end to end.
   streams are ignored by the page.
 - Tested platforms: see [docs/DEPENDENCIES.md](docs/DEPENDENCIES.md).
 
+## Cleanup
+
+Stop the app and remove its image, then delete the Vonage application if you no
+longer need it:
+
+```bash
+docker compose down --rmi local
+vonage apps delete <APPLICATION_ID>
+```
+
 ## Project layout
 
 ```text
@@ -274,14 +294,17 @@ docs/                  dependency notes, manual test plan, blog notes
 
 ## Related reading (optional)
 
+- Blog post: *Build a Real-Time OpenAI Voice Agent With Vonage Video and Pipecat*
+  (link coming when it's published)
+
 - [AI Video Agents With Vonage, Pipecat and AgentCore](https://developer.vonage.com/en/blog/ai-video-agents-with-vonage-pipecat-and-agentcore)
   by Kitt Phi: the same transport with AWS Nova Sonic, deployed on AWS AgentCore.
   This repository is the OpenAI Realtime, Docker-local alternative.
 - [Introducing Video Connector SDK & Pipecat Transport for AI Video Apps](https://developer.vonage.com/en/blog/new-video-connector-sdk-pipecat-transport-for-ai-video-apps)
 - [Vonage Video Connector guide](https://developer.vonage.com/en/video/guides/vonage-video-connector)
   and [Vonage Video getting started](https://developer.vonage.com/en/video/getting-started)
-- [Pipecat documentation](https://docs.pipecat.ai) and the
-  [Vonage Pipecat fork](https://github.com/Vonage/pipecat)
+- [Vonage Video Transport for Pipecat](https://developer.vonage.com/en/video/guides/vonage-video-connector-pipecat-transport)
+  and the [Pipecat documentation](https://docs.pipecat.ai)
 
 ## License, privacy and attributions
 

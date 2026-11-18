@@ -120,7 +120,7 @@ From `app/agent.py` (trimmed for the post; keep the comments):
 ```
 
 Talking points:
-- Pipecat at the pinned Vonage fork uses `PipelineWorker`, `WorkerRunner` and
+- Pipecat 1.16 uses `PipelineWorker`, `WorkerRunner` and
   `LLMContext`. Older posts show `PipelineTask` and `OpenAILLMContext`.
 - No local VAD: OpenAI's `semantic_vad` decides turns. When you talk over the agent,
   the aggregator broadcasts an interruption, and the Vonage output transport clears
@@ -194,8 +194,9 @@ the OpenAI WebSocket, so nothing keeps billing.
 ## Exact demo flow (for the post and the video)
 
 ```bash
+vonage apps create "Pipecat OpenAI Realtime Agent" --private-key-file ./secrets/private.key
+vonage apps capabilities update <APPLICATION_ID> video > /dev/null
 cp .env.example .env            # set VONAGE_APPLICATION_ID and OPENAI_API_KEY
-cp ~/Downloads/private.key secrets/private.key
 chmod 700 secrets && chmod 644 secrets/private.key
 docker compose up --build
 ```
@@ -206,8 +207,7 @@ greets you → ask a question → interrupt it mid-answer → **Mute** / **Unmut
 
 ## Screenshot and video beats
 
-1. The Vonage dashboard's application page with **Video** enabled (blur the
-   Application ID).
+1. Terminal: `vonage apps show` listing **VIDEO** (blur the Application ID).
 2. `.env.example` next to the README's quick start. Never show a filled-in `.env`.
 3. Terminal: `docker compose up --build` reaching `Ready: agent=OpenAI Realtime model …`.
 4. Browser: start screen with the AI disclosure.

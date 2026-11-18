@@ -43,7 +43,7 @@ def test_health(client):
 def test_serves_the_browser_app(client):
     page = client.get("/")
     assert page.status_code == 200
-    assert "client-sdk-video@2.35.3" in page.text
+    assert "client-sdk-video@2.36.0" in page.text
     assert client.get("/app.js").status_code == 200
 
 

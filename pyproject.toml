@@ -9,12 +9,12 @@ license-files = ["LICENSE"]
 # The Docker image uses Python 3.12.
 requires-python = ">=3.12,<3.13"
 dependencies = [
-    # Pipecat from the Vonage fork, pinned to one tested commit (tag v1.11.0.post1).
-    # The extras pull in the OpenAI Realtime service and, on Linux only, the native
-    # `vonage-video-connector` wheel. See docs/DEPENDENCIES.md before changing this.
-    "pipecat-ai[openai,vonage-video-connector] @ git+https://github.com/Vonage/pipecat.git@be8ede1c19c9974cd3cc430814fb6a591408f54f",
+    # Pipecat from PyPI, pinned to the tested release, as the Vonage Video Transport for
+    # Pipecat guide installs it. The extras pull in the OpenAI Realtime service and, on
+    # Linux only, the native `vonage-video-connector` wheel. See docs/DEPENDENCIES.md.
+    "pipecat-ai[openai,vonage-video-connector]==1.16.0",
     # Vonage server SDK: creates routed sessions and signs participant tokens.
-    "vonage>=4.9.0,<5",
+    "vonage>=4.10.0,<5",
     "fastapi>=0.135,<1",
     "uvicorn>=0.54,<1",
 ]
@@ -33,7 +33,7 @@ dev = [
 package = false
 # Reproducible resolution for the frozen tutorial: ignore releases newer than this
 # date when re-locking. Bump deliberately, then re-run the tests and manual checklist.
-exclude-newer = "2026-10-12T00:00:00Z"
+exclude-newer = "2026-11-13T00:00:00Z"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
