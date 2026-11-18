@@ -230,7 +230,7 @@ docker build --target test -t vonage-pipecat-openai-realtime:test .
 | Page says **The server is not configured yet** | Fix each listed item in `.env` (or `secrets/`), then restart `docker compose up`. |
 | `Cannot read the Vonage private key … permission denied` | Run `chmod 644 secrets/private.key` (keep `chmod 700 secrets`). The container runs as an unprivileged user. |
 | **Vonage rejected the credentials (401)** | `VONAGE_APPLICATION_ID` and `private.key` must come from the same application. A regenerated key replaces the old one. |
-| **Vonage refused the request (403)** | Turn on the **Video** capability for the application. |
+| **Vonage refused the request (403)** | Turn on Video: `vonage apps capabilities update <APPLICATION_ID> video > /dev/null`. |
 | `VONAGE_APPLICATION_ID looks like a legacy OpenTok project API key` | This sample needs a Vonage application ID (a UUID), not an OpenTok API key and secret. |
 | Browser: **Could not connect to Vonage Video (1004)** | An authentication error: the token was rejected. Check that the app ID and key match, and that your computer's clock (and Docker Desktop's, after sleep) is correct, since tokens are time-limited. |
 | Session errors after adapting this to your own session | This sample always creates routed sessions. If you reuse an existing session, create it with media mode `routed`. |

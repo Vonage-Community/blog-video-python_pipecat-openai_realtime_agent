@@ -50,8 +50,8 @@ class VonageVideo:
             ) from exc
         except ForbiddenError as exc:
             raise VideoApiError(
-                "Vonage refused the request (403). Enable Video capabilities for this "
-                "application in the Vonage dashboard"
+                "Vonage refused the request (403). Enable Video for this application with "
+                "`vonage apps capabilities update <APPLICATION_ID> video`"
             ) from exc
         except RateLimitedError as exc:
             raise VideoApiError("Vonage rate-limited session creation (429). Retry soon") from exc
