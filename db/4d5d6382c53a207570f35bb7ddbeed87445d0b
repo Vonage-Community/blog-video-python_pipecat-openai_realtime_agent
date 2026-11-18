@@ -1,0 +1,16 @@
+README.md
+  h_d5be481ddf6211 233
+app/video_sessions.py
+  h_d5be481ddf6211 53-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "db4d5d6382c53a207570f35bb7ddbeed87445d0b",
+  "prompts": {},
+  "humans": {
+    "h_d5be481ddf6211": {
+      "author": "Benjamin Aronov <benjamin@benyas.com>"
+    }
+  }
+}
