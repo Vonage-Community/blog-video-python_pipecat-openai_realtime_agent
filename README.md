@@ -89,7 +89,7 @@ Authenticate the CLI with the API key and secret from the
 `--private-key-file` saves its private key straight into `secrets/`:
 
 ```bash
-vonage auth set --api-key <VONAGE_API_KEY> --api-secret <VONAGE_API_SECRET>
+vonage auth set --api-key='YOUR_API_KEY' --api-secret='YOUR_API_SECRET'
 vonage apps create "Pipecat OpenAI Realtime Agent" --private-key-file ./secrets/private.key
 ```
 
