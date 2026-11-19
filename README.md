@@ -78,8 +78,8 @@ Both services bill per use; see [Limitations and costs](#limitations-and-costs).
 ## Quick start
 
 ```bash
-git clone https://github.com/Vonage-Community/vonage-pipecat-openai-realtime.git
-cd vonage-pipecat-openai-realtime
+git clone https://github.com/Vonage-Community/blog-video-python_pipecat-openai_realtime_agent.git
+cd blog-video-python_pipecat-openai_realtime_agent
 ```
 
 ### 1. Create the Vonage application

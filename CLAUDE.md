@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Maintainer notes for **vonage-pipecat-openai-realtime**, the Part 1 sample of a
+Maintainer notes for **blog-video-python_pipecat-openai_realtime_agent**, the Part 1 sample of a
 three-part Vonage Developer Blog series. This repository is the companion to a
 published tutorial and must keep matching it.
 
