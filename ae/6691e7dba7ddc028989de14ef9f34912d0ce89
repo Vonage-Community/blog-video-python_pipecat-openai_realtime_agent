@@ -1,0 +1,16 @@
+pyproject.toml
+  h_d5be481ddf6211 26
+uv.lock
+  h_d5be481ddf6211 118,120,122,679,684,686,709,711,713-726,912,921,923,1343
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ae6691e7dba7ddc028989de14ef9f34912d0ce89",
+  "prompts": {},
+  "humans": {
+    "h_d5be481ddf6211": {
+      "author": "Benjamin Aronov <benjamin@benyas.com>"
+    }
+  }
+}
